@@ -81,55 +81,57 @@ class NotePlayer:
         self.outputDevice.set_instrument(self.instrumentID, self.channel)
         self.outputDevice.note_on(self.rowTL[1], self.velocity, self.channel)
 
+
 def createWindow() -> sg.Window:
-    layout = [ [ sg.B('pause'),sg.Push(),sg.B('keep'),
-                sg.Push(),sg.B('play'),sg.Push(),
-                sg.B('loading'),sg.Push(),
-                sg.FileBrowse('Load')],
-            [  sg.Push(),
-                sg.B(k=1, size=(3, 2),
-                    button_color=('brown on black')),
-                sg.B(k=3, size=(3, 2),
-                    button_color=('brown on black')),
-                sg.B(k=999, size=(3,2),
-                    button_color='pink',border_width=0),
-                sg.B(k=6, size=(3, 2),
-                    button_color=('brown on black')),
-                sg.B(k=8, size=(3, 2),
-                    button_color=('brown on black')),
-                sg.B(k=10, size=(3, 2),
-                    button_color=('brown on black')),
-                sg.B(k=999, size=(3,2),
-                    button_color='pink',border_width=0),
-                sg.B(k=13, size=(3, 2),
-                    button_color=('brown on black')),
-                sg.B(k=15, size=(3, 2),
-                    button_color=('brown on black')),
-                sg.Push(),],
-            [  sg.B(k=0, size=(3, 2),  #3が横,2がたて
-                    button_color=('brown on White')),
-                sg.B(k=2, size=(3, 2),
-                    button_color=('brown on White')),
-                sg.B(k=4, size=(3, 2),
-                    button_color=('brown on White')),
-                sg.B(k=5, size=(3, 2),
-                    button_color=('brown on White')),
-                sg.B(k=7, size=(3, 2),
-                    button_color=('brown on White')),
-                sg.B(k=9, size=(3, 2),
-                    button_color=('brown on White')),
-                sg.B(k=11, size=(3, 2),
-                    button_color=('brown on White')),
-                sg.B(k=12, size=(3, 2),
-                    button_color=('brown on White')),
-                sg.B(k=14, size=(3, 2),
-                    button_color=('brown on White')),
-                sg.B(k=16, size=(3, 2),
-                    button_color=('brown on White')),],
-            [    sg.Combo(list(INSTRUMENTS.keys()), k=88,
-                        default_value='ピアノ'),
-                sg.I(k='Ld', enable_events=1, size=(30,1))],
-            [ sg.ML(k='txt', size=(30, 5)) ]]
+    layout = [
+        # 機能ボタン
+        [
+            sg.B('pause'),
+            sg.Push(),
+            sg.B('keep'),
+            sg.Push(),
+            sg.B('play'),
+            sg.Push(),
+            sg.B('loading'),
+            sg.Push(),
+            sg.FileBrowse('Load')
+        ],
+        # 黒キー
+        [
+            sg.Push(),
+            sg.B(k=1, size=(3, 2), button_color=('brown on black')),
+            sg.B(k=3, size=(3, 2), button_color=('brown on black')),
+            sg.B(k=999, size=(3,2), button_color='pink',border_width=0),
+            sg.B(k=6, size=(3, 2), button_color=('brown on black')),
+            sg.B(k=8, size=(3, 2), button_color=('brown on black')),
+            sg.B(k=10, size=(3, 2), button_color=('brown on black')),
+            sg.B(k=999, size=(3,2), button_color='pink',border_width=0),
+            sg.B(k=13, size=(3, 2), button_color=('brown on black')),
+            sg.B(k=15, size=(3, 2), button_color=('brown on black')),
+            sg.Push(),
+        ],
+        # 白キー
+        [
+            sg.B(k=0, size=(3, 2), button_color=('brown on White')),
+            sg.B(k=2, size=(3, 2), button_color=('brown on White')),
+            sg.B(k=4, size=(3, 2), button_color=('brown on White')),
+            sg.B(k=5, size=(3, 2), button_color=('brown on White')),
+            sg.B(k=7, size=(3, 2), button_color=('brown on White')),
+            sg.B(k=9, size=(3, 2), button_color=('brown on White')),
+            sg.B(k=11, size=(3, 2), button_color=('brown on White')),
+            sg.B(k=12, size=(3, 2), button_color=('brown on White')),
+            sg.B(k=14, size=(3, 2), button_color=('brown on White')),
+            sg.B(k=16, size=(3, 2), button_color=('brown on White')),
+        ],
+        # 入力
+        [
+            sg.Combo(list(INSTRUMENTS.keys()), k=88, default_value='ピアノ'),
+            sg.I(k='Ld', enable_events=1, size=(30,1))
+        ],
+        [
+            sg.ML(k='txt', size=(30, 5))
+        ]
+    ]
 
     win = sg.Window("Music", layout,finalize=True)
     return win
