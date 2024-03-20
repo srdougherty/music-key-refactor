@@ -3,23 +3,51 @@ import time
 import time, sys, os
 import PySimpleGUI as sg
 
-instD = { 'ピアノ': 0, 'マリンバ': 12,
-          'オルガン': 19,'ハーモニカ':22,
-          'ギター': 24,'ヴァイオリン': 40,
-          'ビオラ':41,'チェロ':42,
-          'コントラバス':43,'ハープ':46,
-          'ティンパニー':47,'トランペット': 56,
-          'チューバ':58,'アルトサックス': 65,
-          'クラリネット':71,'ファゴット':70,
-          'ピッコロ':72,'フルート': 73,'リコーダー':74,
-          '声': 91,'琴':107, '鳥':123, }
+# 0: Piano, 19:Organ, 40:Violin 56:Trumpet, 91:Voice
+# https://fmslogo.sourceforge.io/manual/midi-instrument.html
+INSTRUMENTS = {
+    'ピアノ': 0,
+    'マリンバ': 12,
+    'オルガン': 19,
+    'ハーモニカ':22,
+    'ギター': 24,
+    'ヴァイオリン': 40,
+    'ビオラ':41,
+    'チェロ':42,
+    'コントラバス':43,
+    'ハープ':46,
+    'ティンパニー':47,
+    'トランペット': 56,
+    'チューバ':58,
+    'アルトサックス': 65,
+    'クラリネット':71,
+    'ファゴット':70,
+    'ピッコロ':72,
+    'フルート': 73,
+    'リコーダー':74,
+    '声': 91,
+    '琴':107,
+    '鳥':123,
+}
 
 
 sg.theme('Lightgreen')
 sg.set_options(font = (None, 24))
 
-notename = ["ド","C#","レ","D#","ミ","ファ","F#","ソ",
-            "G#","ラ","A#","シ"]
+NOTE_NAMES = [
+    "ド",
+    "C#",
+    "レ",
+    "D#",
+    "ミ",
+    "ファ",
+    "F#",
+    "ソ",
+    "G#",
+    "ラ",
+    "A#",
+    "シ",
+]
 
 layout = [ [ sg.B('pause'),sg.Push(),sg.B('keep'),
              sg.Push(),sg.B('play'),sg.Push(),
@@ -65,7 +93,7 @@ layout = [ [ sg.B('pause'),sg.Push(),sg.B('keep'),
                   button_color=('brown on White')),
              sg.B(k=16, size=(3, 2),
                   button_color=('brown on White')),],
-        [    sg.Combo(list(instD.keys()), k=88,
+        [    sg.Combo(list(INSTRUMENTS.keys()), k=88,
                       default_value='ピアノ'),
              sg.I(k='Ld', enable_events=1, size=(30,1))],
           [ sg.ML(k='txt', size=(30, 5)) ]]
@@ -90,7 +118,7 @@ def note1(note, length=0.25):
     note += shift
     odv.set_instrument(instN, 1)
     odv.note_on(note, 127,1)
-    print(notename[(note)%12] + str((note)//12-2))
+    print(NOTE_NAMES[(note)%12] + str((note)//12-2))
     time.sleep(length)
     odv.note_off(note,127,1)
 def noteM(noteL):
@@ -98,7 +126,7 @@ def noteM(noteL):
     print(len(noteL), noteL, n1L)
     for note in n1L:
         if note >= 0: odv.note_on(note, 127, 1)
-    print(notename[(note)%12] + str((note)//12-2))
+    print(NOTE_NAMES[(note)%12] + str((note)//12-2))
     time.sleep(float(noteL[1]))
     for note in n1L:
         if note >= 0: odv.note_off(note, 127, 1)
@@ -142,7 +170,7 @@ while True:
              score = f.read()
 
      elif int(e) in range(18):
-         instN = instD[v[88]]
+         instN = INSTRUMENTS[v[88]]
              #()の中の数字はmajoescaleの[]の中の数
          note1(e + 60)
              # + 60,2)にすると音の出る長さが長くなる
