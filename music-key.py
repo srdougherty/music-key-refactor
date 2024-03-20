@@ -135,23 +135,11 @@ def createWindow() -> sg.Window:
                     background_color = 'pink')
     return win
 
-def main() -> int:
+
+def startEventLoop(win: sg.Window, player: NotePlayer):
     score = ''
     length = 0.5
 
-    # midiの初期化
-    pygame.midi.init()
-    outputDevice = pygame.midi.Output(0)
-    
-    # PySimpleGUIの初期化
-    sg.theme('Lightgreen')
-    sg.set_options(font = (None, 24))
-
-    # ウィンドウの初期化
-    win = createWindow()
-    
-    # イベントループ開始
-    player = NotePlayer(outputDevice)
     while True:
         e, v = win.read()
         if e is None: break
@@ -185,6 +173,24 @@ def main() -> int:
             player.note1(e + 60)
                 # + 60,2)にすると音の出る長さが長くなる
             score += f'{e+60} {length}\n'
+
+
+def main() -> int:
+    # midiの初期化
+    pygame.midi.init()
+    outputDevice = pygame.midi.Output(0)
+    
+    # PySimpleGUIの初期化
+    sg.theme('Lightgreen')
+    sg.set_options(font = (None, 24))
+
+    # ウィンドウの初期化
+    win = createWindow()
+    
+    # イベントループ開始
+    player = NotePlayer(outputDevice)
+    startEventLoop(win, player)
+    win.close()
 
     # クリーンアップ
     pygame.quit()
