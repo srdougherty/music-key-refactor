@@ -46,42 +46,45 @@ NOTE_NAMES = [
     "シ",
 ]
 
+def getNoteName(noteIndex: int):
+    return NOTE_NAMES[(noteIndex) % len(NOTE_NAMES)]
 
-def note1(note, length=0.25):
-    note = int(note)
-    note += shift
-    outputDevice.set_instrument(instN, 1)
-    outputDevice.note_on(note, 127,1)
-    print(NOTE_NAMES[(note)%12] + str((note)//12-2))
-    time.sleep(length)
-    outputDevice.note_off(note,127,1)
-def noteM(noteL):
-    n1L = [int(e) for i,e in enumerate(noteL) if i%2==0]
-    print(len(noteL), noteL, n1L)
-    for note in n1L:
-        if note >= 0: outputDevice.note_on(note, 127, 1)
-    print(NOTE_NAMES[(note)%12] + str((note)//12-2))
-    time.sleep(float(noteL[1]))
-    for note in n1L:
-        if note >= 0: outputDevice.note_off(note, 127, 1)
-def playrowTL():
-      outputDevice.set_instrument(instN, 1)
-      outputDevice.note_on(rowTL[1], 127, 1)
+class NotePlayer:
+    def __init__(self, outputDevice: pygame.midi.Output):
+        self.outputDevice = outputDevice
+        self.shift = 0
+        self.rowTL = None
+        self.instrumentID = INSTRUMENTS['ピアノ']
+        self.channel = 1
+        self.velocity = 127
+    
+    def note1(self, note, length=0.25):
+        note = int(note)
+        note += self.shift
+        self.outputDevice.set_instrument(self.instrumentID, self.channel)
+        self.outputDevice.note_on(note, self.velocity, self.channel)
+        print(getNoteName(note) + str((note)//len(NOTE_NAMES)-2))
+        time.sleep(length)
+        self.outputDevice.note_off(note, self.velocity, self.channel)
+    
+    def noteM(self, noteL):
+        n1L = [int(event) for i,event in enumerate(noteL) if i%2==0]
+        print(len(noteL), noteL, n1L)
+        for note in n1L:
+            if note >= 0: self.outputDevice.note_on(note, self.velocity, self.channel)
+        print(getNoteName(note) + str((note)//len(NOTE_NAMES)-2))
+        time.sleep(float(noteL[1]))
+        for note in n1L:
+            if note >= 0: self.outputDevice.note_off(note, self.velocity, self.channel)
+    
+    def playrowTL(self):
+        self.outputDevice.set_instrument(self.instrumentID, self.channel)
+        self.outputDevice.note_on(self.rowTL[1], self.velocity, self.channel)
 
-outputDevice = None
-instN = 0
-time1 = 0
-score = ''
-length = 0.5
-shift = 0
-rowTL = None
-scoreTL = []
-txt = ''
 
 def main() -> int:
-    global outputDevice
-    global instN
-    global score
+    score = ''
+    length = 0.5
 
     # midiの初期化
     pygame.midi.init()
@@ -145,20 +148,21 @@ def main() -> int:
                     background_color = 'pink')
     
     # イベントループ開始
+    player = NotePlayer(outputDevice)
     while True:
         e, v = win.read()
         if e is None: break
         print(e, v)
         speed = win.read(timeout=125)
         if e == 'play':
-            instN = v[88]
+            player.instrumentID = v[88]
             for row in score.splitlines():
                 print(row)
                 L = row.split()
                 if int(L[0]) == -1:
                     time.sleep(float(L[1]))
                 else:
-                    noteM(L)
+                    player.noteM(L)
         elif e == 'pause':
             time.sleep(length)
             score += f'{-1} {length}\n'
@@ -173,9 +177,9 @@ def main() -> int:
                 score = f.read()
 
         elif int(e) in range(18):
-            instN = INSTRUMENTS[v[88]]
+            player.instrumentID = INSTRUMENTS[v[88]]
                 #()の中の数字はmajoescaleの[]の中の数
-            note1(e + 60)
+            player.note1(e + 60)
                 # + 60,2)にすると音の出る長さが長くなる
             score += f'{e+60} {length}\n'
 
