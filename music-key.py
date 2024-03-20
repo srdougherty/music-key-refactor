@@ -81,20 +81,7 @@ class NotePlayer:
         self.outputDevice.set_instrument(self.instrumentID, self.channel)
         self.outputDevice.note_on(self.rowTL[1], self.velocity, self.channel)
 
-
-def main() -> int:
-    score = ''
-    length = 0.5
-
-    # midiの初期化
-    pygame.midi.init()
-    outputDevice = pygame.midi.Output(0)
-    
-    # PySimpleGUIの初期化
-    sg.theme('Lightgreen')
-    sg.set_options(font = (None, 24))
-
-    # ウィンドウの初期化
+def createWindow() -> sg.Window:
     layout = [ [ sg.B('pause'),sg.Push(),sg.B('keep'),
                 sg.Push(),sg.B('play'),sg.Push(),
                 sg.B('loading'),sg.Push(),
@@ -146,6 +133,22 @@ def main() -> int:
 
     win = sg.Window("Music", layout,finalize=True,
                     background_color = 'pink')
+    return win
+
+def main() -> int:
+    score = ''
+    length = 0.5
+
+    # midiの初期化
+    pygame.midi.init()
+    outputDevice = pygame.midi.Output(0)
+    
+    # PySimpleGUIの初期化
+    sg.theme('Lightgreen')
+    sg.set_options(font = (None, 24))
+
+    # ウィンドウの初期化
+    win = createWindow()
     
     # イベントループ開始
     player = NotePlayer(outputDevice)
