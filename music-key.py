@@ -105,7 +105,7 @@ win = sg.Window("Music", layout,finalize=True,
 # https://fmslogo.sourceforge.io/manual/midi-instrument.html
 instval = 0
 pygame.midi.init()
-odv = pygame.midi.Output(0)
+outputDevice = pygame.midi.Output(0)
 
 
 majorscale = [0,1,2,3,4,5,6,7,8,9,10,
@@ -116,23 +116,23 @@ majorscale = [0,1,2,3,4,5,6,7,8,9,10,
 def note1(note, length=0.25):
     note = int(note)
     note += shift
-    odv.set_instrument(instN, 1)
-    odv.note_on(note, 127,1)
+    outputDevice.set_instrument(instN, 1)
+    outputDevice.note_on(note, 127,1)
     print(NOTE_NAMES[(note)%12] + str((note)//12-2))
     time.sleep(length)
-    odv.note_off(note,127,1)
+    outputDevice.note_off(note,127,1)
 def noteM(noteL):
     n1L = [int(e) for i,e in enumerate(noteL) if i%2==0]
     print(len(noteL), noteL, n1L)
     for note in n1L:
-        if note >= 0: odv.note_on(note, 127, 1)
+        if note >= 0: outputDevice.note_on(note, 127, 1)
     print(NOTE_NAMES[(note)%12] + str((note)//12-2))
     time.sleep(float(noteL[1]))
     for note in n1L:
-        if note >= 0: odv.note_off(note, 127, 1)
+        if note >= 0: outputDevice.note_off(note, 127, 1)
 def playrowTL():
-      odv.set_instrument(instN, 1)
-      odv.note_on(rowTL[1], 127, 1)
+      outputDevice.set_instrument(instN, 1)
+      outputDevice.note_on(rowTL[1], 127, 1)
         
 time1 = 0
 score = ''
