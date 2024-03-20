@@ -131,8 +131,7 @@ def createWindow() -> sg.Window:
                 sg.I(k='Ld', enable_events=1, size=(30,1))],
             [ sg.ML(k='txt', size=(30, 5)) ]]
 
-    win = sg.Window("Music", layout,finalize=True,
-                    background_color = 'pink')
+    win = sg.Window("Music", layout,finalize=True)
     return win
 
 
@@ -182,6 +181,10 @@ def main() -> int:
     
     # PySimpleGUIの初期化
     sg.theme('Lightgreen')
+    bgColor = 'pink'
+    sg.theme_background_color(bgColor)
+    sg.theme_text_element_background_color(bgColor)
+    sg.theme_element_background_color(bgColor)
     sg.set_options(font = (None, 24))
 
     # ウィンドウの初期化
