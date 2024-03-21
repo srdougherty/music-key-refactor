@@ -139,7 +139,7 @@ def createWindow() -> sg.Window:
         ],
         # 入力
         [
-            sg.Combo(list(INSTRUMENTS.keys()), k=88, default_value='ピアノ'),
+            sg.Combo(list(INSTRUMENTS.keys()), k='-CURRENT_INSTRUMENT-', default_value='ピアノ'),
             sg.Input(k='Ld', enable_events=1, size=(30,1))
         ],
         [
@@ -161,7 +161,7 @@ def startEventLoop(win: sg.Window, player: NotePlayer):
         print(event, values)
         speed = win.read(timeout=125)
         if event == 'play':
-            player.instrumentID = values[88]
+            player.instrumentID = values['-CURRENT_INSTRUMENT-']
             for row in score.splitlines():
                 print(row)
                 L = row.split()
@@ -183,7 +183,7 @@ def startEventLoop(win: sg.Window, player: NotePlayer):
                 score = f.read()
 
         elif int(event) in range(18):
-            player.instrumentID = INSTRUMENTS[values[88]]
+            player.instrumentID = INSTRUMENTS[values['-CURRENT_INSTRUMENT-']]
                 #()の中の数字はmajoescaleの[]の中の数
             player.note1(event + 60)
                 # + 60,2)にすると音の出る長さが長くなる
