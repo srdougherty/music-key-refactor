@@ -109,36 +109,42 @@ def createWindow() -> sg.Window:
             sg.Push(),
             sg.FileBrowse('Load', target='-CURRENT_FILE-'),
         ],
-        # 黒キー
         [
-            sg.Push(),
-            createBlackKeyButton(1),
-            createBlackKeyButton(3),
-            createKeySpacer(),
-            createBlackKeyButton(6),
-            createBlackKeyButton(8),
-            createBlackKeyButton(10),
-            createKeySpacer(),
-            createBlackKeyButton(13),
-            createBlackKeyButton(15),
-            sg.Push(),
-        ],
-        # 白キー
-        [
-            createWhiteKeyButton(0),
-            createWhiteKeyButton(2),
-            createWhiteKeyButton(4),
-            createWhiteKeyButton(5),
-            createWhiteKeyButton(7),
-            createWhiteKeyButton(9),
-            createWhiteKeyButton(11),
-            createWhiteKeyButton(12),
-            createWhiteKeyButton(14),
-            createWhiteKeyButton(16),
+            sg.Column([[sg.Push()]]),
+            sg.Column([
+                # 黒キー
+                [
+                    sg.Push(),
+                    createBlackKeyButton(1),
+                    createBlackKeyButton(3),
+                    createKeySpacer(),
+                    createBlackKeyButton(6),
+                    createBlackKeyButton(8),
+                    createBlackKeyButton(10),
+                    createKeySpacer(),
+                    createBlackKeyButton(13),
+                    createBlackKeyButton(15),
+                    sg.Push(),
+                ],
+                # 白キー
+                [
+                    createWhiteKeyButton(0),
+                    createWhiteKeyButton(2),
+                    createWhiteKeyButton(4),
+                    createWhiteKeyButton(5),
+                    createWhiteKeyButton(7),
+                    createWhiteKeyButton(9),
+                    createWhiteKeyButton(11),
+                    createWhiteKeyButton(12),
+                    createWhiteKeyButton(14),
+                    createWhiteKeyButton(16),
+                ],
+            ]),
+            sg.Column([[sg.Push()]]),
         ],
         # 入力
         [
-            sg.Combo(list(INSTRUMENTS.keys()), k='-CURRENT_INSTRUMENT-', default_value='ピアノ'),
+            sg.Combo(list(INSTRUMENTS.keys()), k='-CURRENT_INSTRUMENT-', default_value='ピアノ', readonly=True, size=(13, 1)),
             sg.Input(k='-CURRENT_FILE-', enable_events=1, size=(30,1))
         ],
         [
