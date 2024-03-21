@@ -180,9 +180,12 @@ def startEventLoop(win: sg.Window, player: NotePlayer):
             with open('score.txt', 'r') as f:
                 score = f.read()
         elif event == '-CURRENT_FILE-':
-            with open(values['-CURRENT_FILE-'], 'r') as f:
-                score = f.read()
-
+            filename = values['-CURRENT_FILE-']
+            if filename:
+                print(f"filename: {filename}")
+                if os.path.exists(filename):
+                    with open(filename, 'r') as f:
+                        score = f.read()
         elif int(event) in range(18):
             player.instrumentID = INSTRUMENTS[values['-CURRENT_INSTRUMENT-']]
                 #()の中の数字はmajoescaleの[]の中の数
