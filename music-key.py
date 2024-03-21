@@ -56,6 +56,7 @@ class NotePlayer:
         self.instrumentID = INSTRUMENTS['ピアノ']
         self.channel = 1
         self.velocity = 127
+        self.cancel = False
     
     def note1(self, note, length=0.25):
         note = int(note)
@@ -83,6 +84,8 @@ class NotePlayer:
 
 def playScore(player: NotePlayer, score: str):
     for row in score.splitlines():
+        if player.cancel:
+            break
         print(row)
         L = row.split()
         if int(L[0]) == -1:
@@ -114,6 +117,8 @@ def createWindow() -> sg.Window:
             sg.Button('keep'),
             sg.Push(),
             sg.Button('play'),
+            sg.Push(),
+            sg.Button('stop'),
             sg.Push(),
             sg.Button('loading'),
             sg.Push(),
@@ -178,7 +183,10 @@ def startEventLoop(win: sg.Window, player: NotePlayer):
         speed = win.read(timeout=125)
         if event == 'play':
             player.instrumentID = values['-CURRENT_INSTRUMENT-']
+            player.cancel = False
             win.start_thread(lambda : playScore(player, score))
+        elif event == 'stop':
+            player.cancel = True
         elif event == 'pause':
             time.sleep(length)
             score += f'{-1} {length}\n'
