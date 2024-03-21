@@ -156,12 +156,12 @@ def startEventLoop(win: sg.Window, player: NotePlayer):
     length = 0.5
 
     while True:
-        e, v = win.read()
-        if e is None: break
-        print(e, v)
+        event, values = win.read()
+        if event is None: break
+        print(event, values)
         speed = win.read(timeout=125)
-        if e == 'play':
-            player.instrumentID = v[88]
+        if event == 'play':
+            player.instrumentID = values[88]
             for row in score.splitlines():
                 print(row)
                 L = row.split()
@@ -169,25 +169,25 @@ def startEventLoop(win: sg.Window, player: NotePlayer):
                     time.sleep(float(L[1]))
                 else:
                     player.noteM(L)
-        elif e == 'pause':
+        elif event == 'pause':
             time.sleep(length)
             score += f'{-1} {length}\n'
-        elif e == 'keep':
+        elif event == 'keep':
             with open('score.txt', 'w') as f:
                 f.write(score)
-        elif e == 'loading':
+        elif event == 'loading':
             with open('score.txt', 'r') as f:
                 score = f.read()
-        elif e=='Ld':
-            with open(v['Ld'], 'r') as f:
+        elif event=='Ld':
+            with open(values['Ld'], 'r') as f:
                 score = f.read()
 
-        elif int(e) in range(18):
-            player.instrumentID = INSTRUMENTS[v[88]]
+        elif int(event) in range(18):
+            player.instrumentID = INSTRUMENTS[values[88]]
                 #()の中の数字はmajoescaleの[]の中の数
-            player.note1(e + 60)
+            player.note1(event + 60)
                 # + 60,2)にすると音の出る長さが長くなる
-            score += f'{e+60} {length}\n'
+            score += f'{event+60} {length}\n'
 
 
 def main() -> int:
