@@ -1,6 +1,5 @@
 import pygame.midi
-import time
-import time, sys, os
+import time, os
 import PySimpleGUI as sg
 
 # 0: Piano, 19:Organ, 40:Violin 56:Trumpet, 91:Voice
