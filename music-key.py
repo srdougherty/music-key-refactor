@@ -81,6 +81,16 @@ class NotePlayer:
         self.outputDevice.note_on(self.rowTL[1], self.velocity, self.channel)
 
 
+def playScore(player: NotePlayer, score: str):
+    for row in score.splitlines():
+        print(row)
+        L = row.split()
+        if int(L[0]) == -1:
+            time.sleep(float(L[1]))
+        else:
+            player.noteM(L)
+
+
 KEY_BUTTON_SIZE = (3, 2)    # size 3が横,2がたて
 
 def createKeySpacer() -> sg.Text:
@@ -168,13 +178,7 @@ def startEventLoop(win: sg.Window, player: NotePlayer):
         speed = win.read(timeout=125)
         if event == 'play':
             player.instrumentID = values['-CURRENT_INSTRUMENT-']
-            for row in score.splitlines():
-                print(row)
-                L = row.split()
-                if int(L[0]) == -1:
-                    time.sleep(float(L[1]))
-                else:
-                    player.noteM(L)
+            win.start_thread(lambda : playScore(player, score))
         elif event == 'pause':
             time.sleep(length)
             score += f'{-1} {length}\n'
