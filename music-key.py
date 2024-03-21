@@ -82,54 +82,68 @@ class NotePlayer:
         self.outputDevice.note_on(self.rowTL[1], self.velocity, self.channel)
 
 
+KEY_BUTTON_SIZE = (3, 2)    # size 3が横,2がたて
+
+def createKeySpacer() -> sg.Text:
+    return sg.B(k=999, size=KEY_BUTTON_SIZE, button_color=sg.theme_background_color(), border_width=0, disabled=True)
+
+def createKeyButton(key: int, color: str = 'black or white') -> sg.Button:
+    return sg.Button(k=key, size=KEY_BUTTON_SIZE, button_color=(f'brown on {color}'))
+
+def createWhiteKeyButton(key: int):
+    return createKeyButton(key, 'white')
+
+def createBlackKeyButton(key: int):
+    return createKeyButton(key, 'black')
+
 def createWindow() -> sg.Window:
     layout = [
         # 機能ボタン
         [
-            sg.B('pause'),
+            sg.Button('pause'),
             sg.Push(),
-            sg.B('keep'),
+            sg.Button('keep'),
             sg.Push(),
-            sg.B('play'),
+            sg.Button('play'),
             sg.Push(),
-            sg.B('loading'),
+            sg.Button('loading'),
             sg.Push(),
-            sg.FileBrowse('Load')
+            sg.FileBrowse('Load'),
         ],
         # 黒キー
         [
             sg.Push(),
-            sg.B(k=1, size=(3, 2), button_color=('brown on black')),
-            sg.B(k=3, size=(3, 2), button_color=('brown on black')),
-            sg.B(k=999, size=(3,2), button_color='pink',border_width=0),
-            sg.B(k=6, size=(3, 2), button_color=('brown on black')),
-            sg.B(k=8, size=(3, 2), button_color=('brown on black')),
-            sg.B(k=10, size=(3, 2), button_color=('brown on black')),
-            sg.B(k=999, size=(3,2), button_color='pink',border_width=0),
-            sg.B(k=13, size=(3, 2), button_color=('brown on black')),
-            sg.B(k=15, size=(3, 2), button_color=('brown on black')),
+            createBlackKeyButton(1),
+            createBlackKeyButton(3),
+            createKeySpacer(),
+            createBlackKeyButton(6),
+            createBlackKeyButton(8),
+            createBlackKeyButton(10),
+            createKeySpacer(),
+            createBlackKeyButton(13),
+            createBlackKeyButton(15),
             sg.Push(),
         ],
         # 白キー
         [
-            sg.B(k=0, size=(3, 2), button_color=('brown on White')),
-            sg.B(k=2, size=(3, 2), button_color=('brown on White')),
-            sg.B(k=4, size=(3, 2), button_color=('brown on White')),
-            sg.B(k=5, size=(3, 2), button_color=('brown on White')),
-            sg.B(k=7, size=(3, 2), button_color=('brown on White')),
-            sg.B(k=9, size=(3, 2), button_color=('brown on White')),
-            sg.B(k=11, size=(3, 2), button_color=('brown on White')),
-            sg.B(k=12, size=(3, 2), button_color=('brown on White')),
-            sg.B(k=14, size=(3, 2), button_color=('brown on White')),
-            sg.B(k=16, size=(3, 2), button_color=('brown on White')),
+            createWhiteKeyButton(0),
+            createWhiteKeyButton(2),
+            createWhiteKeyButton(4),
+            createWhiteKeyButton(5),
+            createWhiteKeyButton(7),
+            createWhiteKeyButton(9),
+            createWhiteKeyButton(11),
+            createWhiteKeyButton(12),
+            createWhiteKeyButton(14),
+            createWhiteKeyButton(16),
         ],
         # 入力
         [
             sg.Combo(list(INSTRUMENTS.keys()), k=88, default_value='ピアノ'),
-            sg.I(k='Ld', enable_events=1, size=(30,1))
+            sg.Input(k='Ld', enable_events=1, size=(30,1))
         ],
         [
-            sg.ML(k='txt', size=(30, 5))
+            sg.Multiline(k='txt', size=(30, 5))
         ]
     ]
 
