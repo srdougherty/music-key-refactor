@@ -58,10 +58,14 @@ class NotePlayer:
         self.velocity = 127
         self.cancel = False
     
+    def setInstrument(self, instrumentID: int):
+        self.instrumentID = instrumentID
+        self.outputDevice.set_instrument(self.instrumentID, self.channel)
+
     def note1(self, note, length=0.25):
         note = int(note)
         note += self.shift
-        self.outputDevice.set_instrument(self.instrumentID, self.channel)
+        self.setInstrument(self.instrumentID)
         self.outputDevice.note_on(note, self.velocity, self.channel)
         print(getNoteName(note) + str((note)//len(NOTE_NAMES)-2))
         time.sleep(length)
@@ -78,7 +82,7 @@ class NotePlayer:
             if note >= 0: self.outputDevice.note_off(note, self.velocity, self.channel)
     
     def playrowTL(self):
-        self.outputDevice.set_instrument(self.instrumentID, self.channel)
+        self.setInstrument(self.instrumentID)
         self.outputDevice.note_on(self.rowTL[1], self.velocity, self.channel)
 
 
@@ -182,7 +186,7 @@ def startEventLoop(win: sg.Window, player: NotePlayer):
         print(event, values)
         speed = win.read(timeout=125)
         if event == 'play':
-            player.instrumentID = values['-CURRENT_INSTRUMENT-']
+            player.setInstrument(INSTRUMENTS[values['-CURRENT_INSTRUMENT-']])
             player.cancel = False
             win.start_thread(lambda : playScore(player, score))
         elif event == 'stop':
@@ -204,7 +208,7 @@ def startEventLoop(win: sg.Window, player: NotePlayer):
                     with open(filename, 'r') as f:
                         score = f.read()
         elif int(event) in range(18):
-            player.instrumentID = INSTRUMENTS[values['-CURRENT_INSTRUMENT-']]
+            player.setInstrument(INSTRUMENTS[values['-CURRENT_INSTRUMENT-']])
                 #()の中の数字はmajoescaleの[]の中の数
             player.note1(event + 60)
                 # + 60,2)にすると音の出る長さが長くなる
