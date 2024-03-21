@@ -108,7 +108,7 @@ def createWindow() -> sg.Window:
             sg.Push(),
             sg.Button('loading'),
             sg.Push(),
-            sg.FileBrowse('Load'),
+            sg.FileBrowse('Load', target='-CURRENT_FILE-'),
         ],
         # 黒キー
         [
@@ -140,7 +140,7 @@ def createWindow() -> sg.Window:
         # 入力
         [
             sg.Combo(list(INSTRUMENTS.keys()), k='-CURRENT_INSTRUMENT-', default_value='ピアノ'),
-            sg.Input(k='Ld', enable_events=1, size=(30,1))
+            sg.Input(k='-CURRENT_FILE-', enable_events=1, size=(30,1))
         ],
         [
             sg.Multiline(k='txt', size=(30, 5))
@@ -179,8 +179,8 @@ def startEventLoop(win: sg.Window, player: NotePlayer):
         elif event == 'loading':
             with open('score.txt', 'r') as f:
                 score = f.read()
-        elif event=='Ld':
-            with open(values['Ld'], 'r') as f:
+        elif event == '-CURRENT_FILE-':
+            with open(values['-CURRENT_FILE-'], 'r') as f:
                 score = f.read()
 
         elif int(event) in range(18):
