@@ -145,7 +145,7 @@ def createWindow() -> sg.Window:
         # 入力
         [
             sg.Combo(list(INSTRUMENTS.keys()), k='-CURRENT_INSTRUMENT-', default_value='ピアノ', readonly=True, size=(13, 1)),
-            sg.Input(k='-CURRENT_FILE-', enable_events=1, size=(30,1))
+            sg.Input(k='-CURRENT_FILE-', enable_events=True, size=(30,1))
         ],
         [
             sg.Multiline(k='txt', size=(30, 5))
