@@ -157,7 +157,8 @@ def startEventLoop(win: sg.Window, player: NotePlayer):
 
     while True:
         event, values = win.read()
-        if event is None: break
+        if event in (sg.WIN_CLOSED, 'Exit'):
+            break
         print(event, values)
         speed = win.read(timeout=125)
         if event == 'play':
